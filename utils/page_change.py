@@ -2,18 +2,21 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import re
-from config import Config as config
 import notify_wechat
 
 url = "https://www.okx.com/cn/help/section/announcements-latest-announcements"
 prefix = "https://www.okx.com"
 
+REFRESH_TIME = 60 * 60
+
 old_content = ''
 old_title = ''
 old_link = ''
 
-proxy = config.PROXY
-
+proxy = {
+    'http':'http://localhost:7078',
+    'https':'http://localhost:7078'
+}
 
 def get_newer_announcements():
     global old_content, old_title
@@ -28,17 +31,18 @@ def get_newer_announcements():
                     if article_title_tag:
                         article_title = article_title_tag[0].text.strip()
                         if article_title != old_title:
-                            notify_new_article(article_title)
                             old_title = article_title
                             a_tag = article_title_tag[0].find('a')
                             if a_tag:
                                 link = a_tag.get('href')
                                 link = prefix + link
                                 parse_link(link)
-                        old_content = new_content
-            time.sleep(config.REFRESH_TIME)
+                            notify_new_article(article_title)
+                        old_content = new_content       
         except Exception as e:
             print("An error occurred:", str(e))
+        finally:
+            time.sleep(REFRESH_TIME)
 
 
 def parse_link(link):

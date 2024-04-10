@@ -1,9 +1,8 @@
 import urllib.parse
 import urllib.request
 
-import config.Config as config
 
-key = config.SENDKEY
+key = 'SCT192642TpuKXShAZ6bwsRD4gLiDjCVBY'
 
 
 def sc_send(text, desp=''):
