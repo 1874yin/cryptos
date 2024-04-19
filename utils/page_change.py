@@ -1,3 +1,4 @@
+
 import requests
 from bs4 import BeautifulSoup
 import time
@@ -8,9 +9,10 @@ url = "https://www.okx.com/cn/help/section/announcements-latest-announcements"
 prefix = "https://www.okx.com"
 
 REFRESH_TIME = 60 * 60
+# REFRESH_TIME = 5
 
 old_content = ''
-old_title = ''
+old_article_titles = ''
 old_link = ''
 
 proxy = {
@@ -19,26 +21,31 @@ proxy = {
 }
 
 def get_newer_announcements():
-    global old_content, old_title
+    global old_content, old_article_titles
     while True:
+   
         try:
             response = requests.get(url, proxies=proxy)
             if response.status_code == 200:
                 new_content = response.text
                 if new_content != old_content:
                     soup = BeautifulSoup(new_content, "html.parser")
-                    article_title_tag = soup.find_all(attrs={'class': re.compile(r'index_article*')})
-                    if article_title_tag:
-                        article_title = article_title_tag[0].text.strip()
-                        if article_title != old_title:
-                            old_title = article_title
-                            a_tag = article_title_tag[0].find('a')
-                            if a_tag:
-                                link = a_tag.get('href')
-                                link = prefix + link
-                                parse_link(link)
-                            notify_new_article(article_title)
-                        old_content = new_content       
+                    article_titles = soup.find_all(attrs={'class': re.compile(r'index_article*')})
+                    if article_titles != old_article_titles:
+                        length = min(len(article_titles), len(old_article_titles))
+                        for i in range(length):
+                            if article_titles[i] != old_article_titles[i]:
+                                article_title = article_titles[i].text.strip()
+                                a_tag = article_titles[i].find('a')
+                                if a_tag != -1:
+                                    link = a_tag.get('href')
+                                    link = prefix + link
+                                    parse_link(link)
+                                notify_new_article(article_title)
+                                break
+                        old_article_titles = article_titles
+
+                        old_content = new_content    
         except Exception as e:
             print("An error occurred:", str(e))
         finally:

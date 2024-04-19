@@ -1,7 +1,10 @@
+import sys
+sys.path.append('.')
+
 import okx.Trade as Trade
 import time
 import datetime
-import config.Config as config
+from config import Config as config
 
 api_key = config.API_KEY
 api_secret_key = config.API_SECRET_KEY
@@ -43,6 +46,20 @@ def sell_by_market(result):
     else:
         print("Place order failed. Result: %s" % result1)
 
+def buy_by_limit():
+    result = tradeApi.place_order(
+        instId=config.INST_ID,
+        tdMode="cash",
+        side="buy",
+        ordType="limit",
+        sz=config.COIN_NUM,
+        clOrdId=config.CL_OID,
+        px=config.PRICE
+    )
+    if result["code"] == '0':
+        print("Place order successfully. Result:%s" % result)
+    else:
+        print("Place order failed. Result: %s" % result)
 
 def sell_by_limit(result):
     num = get_order_num(result)
@@ -99,10 +116,11 @@ def main():
         while now.strftime("%H:%M:%S") < config.START_TIME:
             now = datetime.datetime.now()
             time.sleep(0.0001)
-    buy_by_market()
+    # buy_by_market()
+    buy_by_limit()
     time.sleep(2)
     result = order_info()
-    sell_by_limit(result)
+    # sell_by_limit(result)
     # sell_by_market(result)
 
 
