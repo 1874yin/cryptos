@@ -37,11 +37,12 @@ def get_newer_announcements():
                             if article_titles[i] != old_article_titles[i]:
                                 article_title = article_titles[i].text.strip()
                                 a_tag = article_titles[i].find('a')
+                                link = ''
                                 if a_tag != -1:
                                     link = a_tag.get('href')
                                     link = prefix + link
                                     parse_link(link)
-                                notify_new_article(article_title)
+                                notify_new_article(article_title, link)
                                 break
                         old_article_titles = article_titles
 
@@ -62,9 +63,10 @@ def parse_link(link):
             print(tag_content)
 
 
-def notify_new_article(article_title):
+def notify_new_article(article_title, link):
     print("New article:", article_title)
-    notify_wechat.sc_send("新公告", desp=article_title)
+    content = article_title + ' 原文：' + link
+    notify_wechat.sc_send("新公告", desp=content)
 
 
 if __name__ == '__main__':

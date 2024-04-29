@@ -2,6 +2,7 @@ import sys
 sys.path.append('.')
 
 import okx.Trade as Trade
+import okx.Account as Account
 import time
 import datetime
 from config import Config as config
@@ -14,7 +15,7 @@ proxy = 'http://127.0.0.1:7078'
 
 tradeApi = Trade.TradeAPI(api_key=api_key, api_secret_key=api_secret_key, passphrase=passphrase, proxy=proxy,
                           flag=config.FLAG)
-
+accountApi = Account.AccountAPI(api_key=api_key, api_secret_key=api_secret_key, passphrase=passphrase, proxy=proxy, flag=config.FLAG)
 
 def buy_by_market():
     result = tradeApi.place_order(
@@ -81,7 +82,7 @@ def sell_by_limit(result):
 
 
 def order_list():
-    result = tradeApi.get_orders_history(
+    result = tradeApi.get_orders_history_archive(
         instType="SPOT",
         ordType="market,limit"
     )
@@ -118,11 +119,14 @@ def main():
             time.sleep(0.0001)
     # buy_by_market()
     buy_by_limit()
-    time.sleep(2)
+    time.sleep(4)
     result = order_info()
     # sell_by_limit(result)
-    # sell_by_market(result)
+    sell_by_market(result)
 
+def test():
+    order_list()
 
 if __name__ == '__main__':
     main()
+    # test()
