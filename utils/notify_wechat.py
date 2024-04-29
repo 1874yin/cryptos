@@ -1,8 +1,12 @@
+import sys
+sys.path.append('.')
+
 import urllib.parse
 import urllib.request
+from config import Config as config
 
 
-key = 'SCT192642TpuKXShAZ6bwsRD4gLiDjCVBY'
+key = config.SEND_KEY
 
 
 def sc_send(text, desp=''):

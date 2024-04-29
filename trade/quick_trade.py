@@ -11,6 +11,7 @@ api_key = config.API_KEY
 api_secret_key = config.API_SECRET_KEY
 passphrase = config.PASSPHRASE
 
+## 本地代理软件端口，一般在软件设置里面可以看到
 proxy = 'http://127.0.0.1:7078'
 
 tradeApi = Trade.TradeAPI(api_key=api_key, api_secret_key=api_secret_key, passphrase=passphrase, proxy=proxy,
