@@ -6,6 +6,7 @@ import okx.Account as Account
 import time
 import datetime
 from config import Config as config
+from utils import notify_wechat
 
 api_key = config.API_KEY
 api_secret_key = config.API_SECRET_KEY
@@ -102,6 +103,9 @@ def order_info():
 def get_order_num(result):
     num = result['data'][0]['fillSz']
     print("成交数量:%s" % num)
+    if num != '0':
+        desp = "成交币种:%s，成交数量:%s" % (config.INST_ID, num)
+        notify_wechat.sc_send("下单成功", desp=desp)
     return num
 
 
@@ -129,5 +133,5 @@ def test():
     order_list()
 
 if __name__ == '__main__':
-    main()
-    # test()
+    # main()
+    test()

@@ -8,7 +8,7 @@ import notify_wechat
 url = "https://www.okx.com/cn/help/section/announcements-latest-announcements"
 prefix = "https://www.okx.com"
 
-REFRESH_TIME = 60 * 60
+REFRESH_TIME = 5 * 60
 # REFRESH_TIME = 5
 
 old_content = ''
